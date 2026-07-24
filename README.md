@@ -27,7 +27,7 @@
 > **By using this tool, you accept FULL RESPONSIBILITY for your actions.**  
 > Unauthorized access to devices is **ILLEGAL** in most jurisdictions.  
 > **Read [DISCLAIMER.md](DISCLAIMER.md) before proceeding.**
-
+> *coming soon gui*
 ---
 
 ## 📖 Overview
