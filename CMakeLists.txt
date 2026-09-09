@@ -168,7 +168,7 @@ target_link_libraries(${PROJECT_NAME}
         PkgConfig::USBMUXD
         PkgConfig::IDEVICE_GLUE
         PkgConfig::LIBZIP
-        SQLite::SQLite3
+        SQLite3::SQLite3
         Threads::Threads
 )
 
@@ -281,7 +281,7 @@ if(BUILD_TESTS)
             PkgConfig::USBMUXD
             PkgConfig::IDEVICE_GLUE
             PkgConfig::LIBZIP
-            SQLite::SQLite3
+            SQLite3::SQLite3
             Threads::Threads
     )
     
