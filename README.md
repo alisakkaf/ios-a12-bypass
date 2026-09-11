@@ -415,6 +415,11 @@ SOFTWARE.
 
 </div>
 
+
+<!-- DONATE_SECTION:START -->
+<!-- DONATE_SECTION:END -->
+
+
 ---
 
 ## 📞 Support & Contact
