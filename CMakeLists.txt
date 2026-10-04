@@ -79,12 +79,14 @@ if(APPLE)
     # Homebrew paths for both Intel and Apple Silicon
     list(APPEND CMAKE_PREFIX_PATH 
         "/opt/homebrew"
+        "/opt/homebrew/opt/sqlite"
         "/usr/local"
+        "/usr/local/opt/sqlite"
     )
     
     # pkg-config paths
     set(ENV{PKG_CONFIG_PATH} 
-        "/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}"
+        "/opt/homebrew/lib/pkgconfig:/opt/homebrew/opt/sqlite/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/opt/sqlite/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}"
     )
 endif()
 
@@ -168,7 +170,7 @@ target_link_libraries(${PROJECT_NAME}
         PkgConfig::USBMUXD
         PkgConfig::IDEVICE_GLUE
         PkgConfig::LIBZIP
-        SQLite::SQLite3
+        SQLite3::SQLite3
         Threads::Threads
 )
 
@@ -281,7 +283,7 @@ if(BUILD_TESTS)
             PkgConfig::USBMUXD
             PkgConfig::IDEVICE_GLUE
             PkgConfig::LIBZIP
-            SQLite::SQLite3
+            SQLite3::SQLite3
             Threads::Threads
     )
     

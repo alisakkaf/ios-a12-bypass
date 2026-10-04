@@ -247,6 +247,79 @@ ios-a12-bypass/
 ├── CMakeLists.txt             # Build configuration
 └── README.md                  # This file
 ```
+### Core Components
+
+#### Core (`include/iCloudBypassA12/core/`, `src/core/`)
+
+The core layer provides the shared types and infrastructure used throughout the
+application:
+
+- `types.hpp` defines strong domain types, device metadata, bypass stages, and
+  progress callback contracts.
+- `result.hpp` provides `Result<T>` and `Result<void>` for explicit,
+  exception-free error propagation.
+- `error.hpp` and `error.cpp` define categorized error codes and attach context
+  to failures.
+- `logger.hpp` and `logger.cpp` provide thread-safe, source-aware diagnostic
+  logging.
+- `raii.hpp` wraps libimobiledevice and plist handles so native resources are
+  released automatically.
+
+#### Device Communication (`include/iCloudBypassA12/device/`, `src/device/`)
+
+The device layer isolates all communication with a connected iOS device:
+
+- `DeviceManager` discovers devices, manages idevice and lockdown sessions,
+  reads device properties, and reports connection events.
+- `AfcClient` manages Apple File Conduit sessions and device-side file
+  operations.
+- `DiagnosticsClient` exposes device diagnostics operations, including reboot
+  requests.
+- `SyslogClient` streams device logs for automated SystemGroup GUID discovery.
+
+These classes own their native handles through the core RAII wrappers and
+return `Result<T>` values to keep transport and service failures explicit.
+
+#### Payload Generation (`include/iCloudBypassA12/payload/`, `src/payload/`)
+
+The payload layer creates the files required by the configured workflow:
+
+- `SqliteBuilder` creates and validates the required SQLite databases.
+- `EpubBuilder` packages device-specific assets into EPUB/ZIP archives.
+- `PayloadGenerator` selects resources for the detected product type and
+  coordinates database, archive, and metadata generation.
+
+Generated files are returned as a `PayloadFiles` value so creation and device
+deployment remain separate concerns.
+
+#### Utilities (`include/iCloudBypassA12/utils/`, `src/utils/`)
+
+- `GuidExtractor` validates, normalizes, and extracts SystemGroup GUID values
+  from syslog text.
+- `PlistUtils` centralizes property-list parsing, serialization, and mutation.
+
+#### Bypass Orchestration (`include/iCloudBypassA12/bypass/`, `src/bypass/`)
+
+- `BypassConfig` contains runtime options, resource paths, timeout and retry
+  settings, and operation-mode controls.
+- `BypassController` coordinates device detection, GUID acquisition, payload
+  generation, upload, reboot/reconnect handling, stage transitions,
+  cancellation, and progress reporting.
+
+The CLI entry point in `src/main.cpp` parses user options into a
+`BypassConfig`, initializes logging, and delegates the workflow to
+`BypassController`.
+
+#### Tests and Resources
+
+- `tests/` contains Catch2 coverage for core result/error behavior, GUID
+  handling, payload builders, schema validation, and the full generation
+  workflow.
+- `resources/plists/` stores product-specific MobileGestalt and EPUB assets.
+  Each device directory uses a normalized product identifier such as
+  `iPhone14-5`.
+- `CMakeLists.txt` discovers native dependencies, builds the CLI and reusable
+  test library, copies runtime resources, and registers tests with CTest.
 
 ---
 
